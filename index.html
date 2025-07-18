@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>منوی کافه</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* فونت Vazir-Bold */
+        @font-face {
+            font-family: 'Vazir';
+            src: url('fonts/Vazir-Bold.woff2') format('woff2'),
+                 url('fonts/Vazir-Bold.woff') format('woff');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazir', Tahoma, sans-serif;
+            font-weight: bold;
+            direction: rtl;
+            text-align: right;
+        }
+
+        body {
+            background-color: #e6f0f7;
+            text-align: center;
+        }
+
+        /* هدر بالایی با دایره چرخان GAM CAFE ☕ */
+        .header-section {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 0;
+            position: relative;
+            text-align: center;
+            width: 100vw;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 0 !important;
+        }
+
+        .main-title {
+            font-size: 2rem;
+            color: #fff !important;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #f1b900 !important;
+            display: block;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+        /* دایره چرخان GAM CAFE ☕ */
+        .logo-box {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            /* **تغییر: اضافه کردن translateZ(0) برای فورس کردن لایه Composited** */
+            transform: translateY(-50%) rotate(0deg) translateZ(0); 
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #6b4423, #a57c4b);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            animation: spin 8s linear infinite; 
+            flex-direction: column;
+            line-height: 1.2;
+            text-align: center;
+            padding: 10px;
+            will-change: transform; 
+            backface-visibility: hidden; 
+        }
+
+        @keyframes spin {
+            /* **تغییر: اضافه کردن translateZ(0) به Keyframes نیز برای حفظ لایه Composited** */
+            from { transform: translateY(-50%) rotate(0deg) translateZ(0); }
+            to { transform: translateY(-50%) rotate(360deg) translateZ(0); }
+        }
+
+        /* کانتینر جدید برای محتوای اصلی */
+        .main-content-wrapper {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 40px; 
+        }
+
+        .menu-item {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            cursor: pointer;
+            overflow: hidden; /* مهم برای max-height: 0 */
+            transition: all 0.3s ease; /* برای انیمیشن کلی آیتم منو */
+        }
+
+        .header {
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .note-in-header {
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+        /* استایل‌های اختصاصی */
+        .header-special-yellow {
+            background-color: #f1b900;
+            color: #000 !important;
+        }
+
+        .header-special-yellow.active {
+            background-color: #000;
+            color: #fff !important;
+        }
+
+        .header-special-black {
+            background-color: #000;
+            color: #fff !important;
+        }
+
+        .header-special-blue {
+            background-color: #A8C5B1;
+            color: #000 !important;
+        }
+
+        .header-special-blue.active {
+            background-color: #000;
+            color: #fff !important;
+        }
+
+        .content {
+            max-height: 0; /* در حالت بسته */
+            overflow: hidden;
+            padding: 0 20px; /* پدینگ در حالت بسته */
+            background-color: #e6f0f7;
+            border-top: 1px solid #ddd; 
+            transition: max-height 0.1s ease-in-out, padding 0.1s ease-in-out, border-top 0.1s ease-in-out;
+            /* **تغییر: افزودن transform و backface-visibility برای فورس کردن لایه Composited** */
+            will-change: max-height, padding, transform; 
+            transform: translateZ(0); /* یا translate3d(0,0,0) */
+            backface-visibility: hidden; 
+        }
+
+        .content.active-content {
+            max-height: 1000px; 
+            padding: 20px; 
+            border-top: 1px solid #ddd; 
+        }
+
+        .content ul {
+            list-style: none;
+            padding-right: 20px; 
+        }
+
+        .content li {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #555;
+            text-align: right;
+        }
+
+        .content li::before {
+            content: "•";
+            margin-right: 10px;
+        }
+
+        .content li span {
+            float: left;
+        }
+
+        /* تنظیمات برای موبایل */
+        @media (max-width: 600px) {
+            body {
+                font-size: 1rem;
+            }
+
+            .header-section {
+                width: 100vw;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 20px;
+                margin-bottom: 30px;
+                margin-top: 0;
+                border-radius: 0;
+            }
+            
+            .logo-box {
+                width: 70px;
+                height: 70px;
+                left: 10px;
+                font-size: 0.9rem;
+            }
+
+            .main-title {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .main-content-wrapper {
+                margin: 30px auto;
+                padding: 0 20px; 
+            }
+
+            .header {
+                font-size: 1.25rem;
+                padding: 18px;
+            }
+
+            .note-in-header {
+                font-size: 0.85rem;
+            }
+
+            .content {
+                padding: 0 15px; 
+            }
+
+            .content.active-content {
+                padding: 15px; 
+            }
+
+            .content li {
+                font-size: 1rem;
+            }
+
+            .content li span {
+                font-size: 1rem;
+            }
+
+            .content li::before {
+                margin-right: 5px;
+            }
+
+            .menu-item {
+                margin-bottom: 18px;
+            }
+
+            .footer {
+                font-size: 1.1rem !important;
+                padding: 20px;
+                margin: 0;
+            }
+        }
+
+        /* فوتر تمام‌عرض بدون فاصله */
+        .footer {
+            margin-top: 0;
+            margin-bottom: 0 !important;
+            padding: 20px;
+            background-color: #000;
+            color: #fff;
+            font-size: 1rem;
+            border-radius: 0;
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+
+<div class="header-section">
+    <div class="logo-box">GAM CAFE ☕</div>
+    <h1 class="main-title">🎵 منوی گام کافه</h1>
+    <p class="subtitle">گامی برای کوک شدن</p>
+</div>
+
+<div class="main-content-wrapper">
+    <div class="menu-item" onclick="toggleContent(this)">
+        <div class="header header-special-yellow">
+            <span>☕ قهوه‌ها</span>
+            <span class="note-in-header">دمای استاندارد شیر: 55 تا 65 درجه</span>
+        </div>
+        <div class="content">
+            <ul>
+                <li><span>60</span> اسپرسو سینگل</li>
+                <li><span>70</span> اسپرسو دبل</li>
+                <li><span>80</span> اسپرسو 100 عربیکا</li>
+                <li><span>60</span> آمریکانو سینگل</li>
+                <li><span>70</span> آمریکانو دبل</li>
+                <li><span>80</span> آمریکانو 100 عربیکا</li>
+                <li><span>90</span> لاته</li>
+                <li><span>90</span> کاپوچینو</li>
+                <li><span>85</span> کورتادو</li>
+                <li><span>95</span> لاته وانیل</li>
+                <li><span>100</span> لاته فندق</li>
+                <li><span>95</span> موکا</li>
+                <li><span>85</span> یونانی</li>
+                <li><span>75</span> قهوه ترک</li>
+                <li><span>80</span> نسکافه</li>
+                <li><span>90</span> آفوگاتو</li>
+                <li><span>105</span> لاته بیسکوییت</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="menu-item" onclick="toggleContent(this)">
+        <div class="header header-special-black">
+            <span>🍵 نوشیدنی‌های گرم</span>
+            <span class="note-in-header">نوشیدنی‌های گرم با دمای مناسب</span>
+        </div>
+        <div class="content">
+            <ul>
+                <li><span>80</span> هات چاکلت</li>
+                <li><span>85</span> هات چاکلت فندق</li>
+                <li><span>95</span> هات چاکلت تلخ</li>
+                <li><span>55</span> شیر و دارچین</li>
+                <li><span>60</span> شیر و عسل</li>
+                <li><span>50</span> چای سیاه</li>
+                <li><span>80</span> چای سفید</li>
+                <li><span>60</span> چای سبز</li>
+                <li><span>80</span> چای کرک</li>
+                <li><span>80</span> چای ماسالا</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="menu-item" onclick="toggleContent(this)">
+        <div class="header header-special-blue">
+            <span>🧊 نوشیدنی‌های سرد</span>
+            <span class="note-in-header">دمای سرد و خنک</span>
+        </div>
+        <div class="content">
+            <ul>
+                <li><span>90</span> آیس لاته</li>
+                <li><span>70</span> آیس آمریکانو</li>
+                <li><span>95</span> آیس موکا</li>
+                <li><span>95</span> آیس لاته کارامل</li>
+                <li><span>95</span> آیس لاته وانیل</li>
+                <li><span>95</span> آیس لاته فندق</li>
+                <li><span>60</span> شربت شیراز</li>
+                <li><span>95</span> اسموتی</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="menu-item" onclick="toggleContent(this)">
+        <div class="header header-special-yellow">
+            <span>🥤 شیک‌ها</span>
+            <span class="note-in-header">با مواد تازه و طعم منحصر به فرد</span>
+        </div>
+        <div class="content">
+            <ul>
+                <li><span>110</span> شیک اسپرسو</li>
+                <li><span>120</span> شیک شکلات</li>
+                <li><span>130</span> شیک کرم فندق</li>
+                <li><span>130</span> شیک بیسکوییت</li>
+                <li><span>130</span> شیک بادام زمینی</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="menu-item" onclick="toggleContent(this)">
+        <div class="header header-special-black">
+            <span>🌿 دمنوش‌ها</span>
+            <span class="note-in-header">بدون بسته آماده، با مواد گیاهی</span>
+        </div>
+        <div class="content">
+            <ul>
+                <li><span>85</span> دمنوش لبو و چای ترش</li>
+                <li style="font-size: 0.85rem; color: #777;">لبو و به و چای ترش</li>
+                <li style="font-size: 0.85rem; color: #777;">خواص : برطرف کننده چربی خون، قند خون، ضد عفونی کننده دستگاه گوارش</li>
+                <li><span>85</span> دمنوش رویال جاسمین</li>
+                <li style="font-size: 0.85rem; color: #777;">چای سبز و گل یاس</li>
+                <li style="font-size: 0.85rem; color: #777;">خواص : ضد سرطان، ضد پیری، کاهش کلسترول، کاهش فشار خون</li>
+                <li><span>80</span> دمنوش لمون گرس زنجبیل</li>
+                <li style="font-size: 0.85rem; color: #777;">لمون گرس و زنجبیل و نعنا</li>
+                <li style="font-size: 0.85rem; color: #777;">خوا خواص : تقویت سیستم ایمنی، تنظیم فشار خون، تقویت کننده پوست و مو، کاهش اضطراب</li>
+                <li><span>85</span> دمنوش کویین بری</li>
+                <li style="font-size: 0.85rem; color: #777;">چای ترش و توت فرنگی و گل سرخ و کلدبری زرشک</li>
+                <li style="font-size: 0.85rem; color: #777;">خوا خواص : برطرف کننده چربی و قند خون، ضد عفونی کننده گوارش، سرشار از آنتی‌اکسیدان</li>
+                <li><span>70</span> دمنوش معجزه</li>
+                <li style="font-size: 0.85rem; color: #777;">سیب و دارچین و هل</li>
+                <li style="font-size: 0.85rem; color: #777;">خواص : درمان بیماری‌های معده، سرشار از ویتامین B و C و مواد معدنی</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="menu-item" onclick="toggleContent(this)">
+        <div class="header header-special-blue">
+            <span>🥪 میان وعده‌ها</span>
+            <span class="note-in-header">تازه و سالم</span>
+        </div>
+        <div class="content">
+            <ul>
+                <li><span>95</span> اسنک</li>
+                <li><span>85</span> تست میکس بادام زمینی و کرم فندق</li>
+                <li><span>90</span> تست تخم مرغ و پنیر</li>
+                <li><span>80</span> تست بادام زمینی</li>
+                <li><span>75</span> تست کرم فندق</li>
+                <li><span>80</span> تست پنیر و گردو</li>
+                <li><span>155</span> پنینی مرغ</li>
+                <li><span>75</span> تست پنیر و گردو</li>
+                <li><span>100</span> چیپس و پنیر</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="menu-item" onclick="toggleContent(this)">
+        <div class="header header-special-yellow">
+            <span>🍰 کیک‌ها</span>
+            <span class="note-in-header">کیک‌های روزانه با پخت تازه</span>
+        </div>
+        <div class="content">
+            <ul>
+                <li><span>100</span> کیک شکلاتی</li>
+                <li><span>100</span> کیک نیویورکی</li>
+                <li><span>140</span> کیک سن سباستین</li>
+                <li><span>100</span> کیک فندق تنوری</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <p style="margin-bottom: 0;">
+        📍 <strong>آدرس:</strong> تهران، پارس غربی، ابتدای خیابان رشید جنوبی، خیابان حسینی یا بهار، روبروی تالار مهرگان، کوچه پاساژ فرهاد
+    </p>
+    <p style="margin: 20px 0;">
+        <a href="https://www.instagram.com/gam_cafe " target="_blank" style="color: #f1b900; text-decoration: none; font-weight: bold; display: block; text-align: right;">
+            اینستاگرام: gam_cafe
+        </a>
+    </p>
+    <p style="margin: 0;">
+        ⏰ <strong>ساعت کار:</strong> 9:30 تا 22:30
+    </p>
+</div>
+
+<script>
+    function toggleContent(element) {
+        const header = element.querySelector('.header');
+        const content = element.querySelector('.content');
+        const allContents = document.querySelectorAll('.content.active-content');
+
+        allContents.forEach(c => {
+            if (c !== content) {
+                c.classList.remove('active-content');
+                const otherHeader = c.closest('.menu-item').querySelector('.header');
+                if (otherHeader) {
+                    otherHeader.classList.remove('active');
+                }
+            }
+        });
+
+        if (content.classList.contains('active-content')) {
+            content.classList.remove('active-content');
+            header.classList.remove('active');
+        } else {
+            content.classList.add('active-content');
+            header.classList.add('active');
+        }
+    }
+</script>
+
+</body>
+</html>
+
